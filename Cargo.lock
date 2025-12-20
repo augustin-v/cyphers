@@ -71,6 +71,7 @@ name = "cyphers"
 version = "0.1.0"
 dependencies = [
  "k256",
+ "sha2",
 ]
 
 [[package]]
