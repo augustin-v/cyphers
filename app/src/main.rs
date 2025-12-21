@@ -12,6 +12,11 @@ use sha2::{Digest, Sha256};
 fn main() {
     let g = AffinePoint::generator();
     let secret = Sha256::digest(b"augustinhandsome"); // here we'd put any shared secret
+
+    for _ in 0..10 {
+        horizontal_line();
+    }
+
     let mut message = Hex::convert("Hello world", false, false);
     let bytes16: [u8; 16] = secret[0..16].try_into().unwrap();
 
@@ -24,4 +29,13 @@ fn main() {
     unsafe {
         cipher.apply_keystream(message.as_bytes_mut());
     }
+}
+
+//1fn encrypt(msg: &str, secret: &str)
+
+fn horizontal_line() {
+    println!("--");
+}
+fn vertical_line() {
+    println!("|");
 }
