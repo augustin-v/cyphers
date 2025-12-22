@@ -1,3 +1,4 @@
+use base64::engine::{Engine, general_purpose};
 use chacha20::{
     ChaCha20,
     cipher::{KeyIvInit, StreamCipher},
@@ -15,14 +16,13 @@ fn main() {
 
     // clear stdout macro
     clear!();
-    // print at x,y
-    xyprint!(20, 22, "hello boys");
-    xyprint!(2, 20, "hello boys");
-    for _ in 0..10 {
-        horizontal_line();
-    }
+    display_square();
+    prompt();
 
-    let mut message = Hex::convert("Hello world", false, false);
+    let mut msg = String::new();
+    std::io::stdin().read_line(&mut msg).expect("msg err");
+
+    let mut message = Hex::convert(&msg, false, false);
     let bytes16: [u8; 16] = secret[0..16].try_into().unwrap();
 
     let scalar = u128::from_be_bytes(bytes16);
@@ -31,16 +31,28 @@ fn main() {
 
     let mut cipher = ChaCha20::new(&key.x(), &nonce.into());
     // encrypt message
+    clear!();
     unsafe {
         cipher.apply_keystream(message.as_bytes_mut());
+        let encrypted_b64 = general_purpose::STANDARD.encode(message.as_bytes());
+        println!("\nSuccess! Here is your encrypted message:\n\n{encrypted_b64}");
     }
 }
 
 //1fn encrypt(msg: &str, secret: &str)
 
-fn horizontal_line() {
-    println!("--");
+fn display_square() {
+    // print at x,y
+    for i in 1..=80 {
+        xyprint!(i, 20, "--");
+        xyprint!(i, 2, "--");
+    }
+    for i in 2..=20 {
+        xyprint!(1, i, "+");
+        xyprint!(81, i, "+");
+    }
 }
-fn vertical_line() {
-    println!("|");
+
+fn prompt() {
+    xyprint!(10, 5, "Enter your message: ");
 }
