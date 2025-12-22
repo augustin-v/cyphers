@@ -7,9 +7,10 @@ use k256::{
     AffinePoint, Scalar, elliptic_curve::group::prime::PrimeCurveAffine,
     elliptic_curve::point::AffineCoordinates,
 };
+use macros::xy;
 use sha2::{Digest, Sha256};
-
 fn main() {
+    tete();
     let g = AffinePoint::generator();
     let secret = Sha256::digest(b"augustinhandsome"); // here we'd put any shared secret
 
@@ -39,3 +40,5 @@ fn horizontal_line() {
 fn vertical_line() {
     println!("|");
 }
+#[xy(x = 10, y = 1)]
+fn tete() {}
