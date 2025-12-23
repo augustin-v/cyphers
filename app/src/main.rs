@@ -9,6 +9,7 @@ use k256::{
     elliptic_curve::point::AffineCoordinates,
 };
 use macros::{clear, xyprint};
+use rand::Rng;
 use sha2::{Digest, Sha256};
 fn main() {
     let g = AffinePoint::generator();
@@ -27,7 +28,8 @@ fn main() {
 
     let scalar = u128::from_be_bytes(bytes16);
     let key = (g * Scalar::from(scalar)).to_affine();
-    let nonce = [0x12; 12];
+
+    let nonce: [u8; 12] = rand::rng().random();
 
     let mut cipher = ChaCha20::new(&key.x(), &nonce.into());
     // encrypt message
@@ -36,6 +38,8 @@ fn main() {
         cipher.apply_keystream(message.as_bytes_mut());
         let encrypted_b64 = general_purpose::STANDARD.encode(message.as_bytes());
         println!("\nSuccess! Here is your encrypted message:\n\n{encrypted_b64}");
+        println!("And the nonce: {:?}", nonce);
+        println!("Your friend needs both to decrypt the message.");
     }
 }
 
