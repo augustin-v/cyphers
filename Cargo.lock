@@ -67,6 +67,7 @@ version = "0.1.0"
 dependencies = [
  "base64",
  "chacha20",
+ "clap",
  "hextool",
  "k256",
  "macros",

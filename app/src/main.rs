@@ -11,7 +11,13 @@ use k256::{
 use macros::{clear, xyprint};
 use rand::Rng;
 use sha2::{Digest, Sha256};
+
+use crate::cli::parse_args;
+
+mod cli;
+
 fn main() {
+    parse_args();
     let g = AffinePoint::generator();
     let secret = Sha256::digest(b"augustinhandsome"); // here we'd put any shared secret
 
@@ -43,7 +49,9 @@ fn main() {
     }
 }
 
-//1fn encrypt(msg: &str, secret: &str)
+fn encrypt<T>(msg: &str, secret: &str) -> Result<(), T> {
+    Ok(())
+}
 
 fn display_square() {
     // print at x,y
