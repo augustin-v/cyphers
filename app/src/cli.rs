@@ -16,15 +16,28 @@ enum Mode {
     Decrypt,
 }
 
-pub fn parse_args() {
+pub fn parse_args() -> Args {
     let cli = Cli::parse();
     match cli.mode {
         Mode::Encrypt => {
-            println!("encrypt mode")
+            println!("encrypt mode");
+            Args::new(cli.secret, None)
         }
         Mode::Decrypt => {
             assert_eq!(cli.nonce.len(), 12, "invalid nonce length");
-            println!("decrypt mode")
+            println!("decrypt mode");
+            Args::new(cli.secret, Some(cli.nonce[0..12].try_into().unwrap()))
         }
+    }
+}
+
+pub struct Args {
+    pub secret: String,
+    pub nonce: Option<[u8; 12]>,
+}
+
+impl Args {
+    pub fn new(secret: String, nonce: Option<[u8; 12]>) -> Self {
+        Self { secret, nonce }
     }
 }

@@ -17,10 +17,13 @@ use crate::cli::parse_args;
 mod cli;
 
 fn main() {
-    parse_args();
+    let args = parse_args();
     let g = AffinePoint::generator();
-    let secret = Sha256::digest(b"augustinhandsome"); // here we'd put any shared secret
+    let secret = args.secret.as_bytes();
 
+    if args.nonce.is_some() {
+        panic!("Decrypt mode not supported yet");
+    }
     // clear stdout macro
     clear!();
     display_square();
