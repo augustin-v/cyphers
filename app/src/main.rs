@@ -3,7 +3,7 @@ use chacha20::{
     ChaCha20,
     cipher::{KeyIvInit, StreamCipher},
 };
-use hextool::{Convert, Hex};
+use hextool::{Convert, Hex, UnHex};
 use k256::{
     AffinePoint, Scalar, elliptic_curve::group::prime::PrimeCurveAffine,
     elliptic_curve::point::AffineCoordinates,
@@ -22,7 +22,25 @@ fn main() {
     let secret = args.secret.as_bytes();
 
     if args.nonce.is_some() {
-        panic!("Decrypt mode not supported yet");
+        // unwrapping is safe
+        let mut message = general_purpose::STANDARD
+            .decode(args.message.unwrap())
+            .unwrap();
+
+        let bytes16: [u8; 16] = secret[0..16].try_into().unwrap();
+        let scalar = u128::from_be_bytes(bytes16);
+        let key = (g * Scalar::from(scalar)).to_affine();
+        let mut cipher = ChaCha20::new(&key.x(), &args.nonce.unwrap().into());
+
+        cipher.apply_keystream(&mut message);
+        println!("message: {:?}", message);
+        let hexstring = message
+            .iter()
+            .map(|b| format!("{:02x}", b))
+            .collect::<String>();
+
+        UnHex::convert(&hexstring, false, false);
+        return;
     }
     // clear stdout macro
     clear!();
