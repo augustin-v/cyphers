@@ -10,7 +10,6 @@ use k256::{
 };
 use macros::{clear, xyprint};
 use rand::Rng;
-use sha2::{Digest, Sha256};
 
 use crate::cli::parse_args;
 
@@ -68,10 +67,6 @@ fn main() {
         println!("And the nonce: {:?}", nonce);
         println!("Your friend needs both to decrypt the message.");
     }
-}
-
-fn encrypt<T>(msg: &str, secret: &str) -> Result<(), T> {
-    Ok(())
 }
 
 fn display_square() {

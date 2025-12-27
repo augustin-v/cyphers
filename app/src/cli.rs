@@ -1,12 +1,14 @@
 use clap::Parser;
 #[derive(Parser)]
 struct Cli {
+    #[arg(long)]
+    mode: Mode,
+    #[arg(short, long)]
     secret: String,
     #[arg(short, long)]
-    mode: Mode,
     message: Option<String>,
     /// required on decrypt mode only
-    #[arg(required_if_eq("mode", "Decrypt"), value_delimiter(','))]
+    #[arg(required_if_eq("mode", "Decrypt"), value_delimiter(','), short, long)]
     nonce: Vec<u8>,
 }
 #[derive(Clone, clap::ValueEnum)]
