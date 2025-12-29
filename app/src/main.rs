@@ -64,7 +64,15 @@ fn main() {
         cipher.apply_keystream(message.as_bytes_mut());
         let encrypted_b64 = general_purpose::STANDARD.encode(message.as_bytes());
         println!("\nSuccess! Here is your encrypted message:\n\n{encrypted_b64}");
-        println!("And the nonce: {:?}", nonce);
+        let mut nonce_str = String::new();
+        nonce.iter().for_each(|f| {
+            let f = format!("{f}");
+            nonce_str.push(f.chars().last().unwrap());
+            nonce_str.push(',');
+        });
+        // get rid of last comma
+        nonce_str.pop().unwrap();
+        println!("And the nonce: {nonce_str}");
         println!("Your friend needs both to decrypt the message.");
     }
 }
