@@ -67,7 +67,7 @@ fn main() {
         let mut nonce_str = String::new();
         nonce.iter().for_each(|f| {
             let f = format!("{f}");
-            nonce_str.push(f.chars().last().unwrap());
+            f.chars().for_each(|c| nonce_str.push(c));
             nonce_str.push(',');
         });
         // get rid of last comma
